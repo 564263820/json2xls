@@ -117,7 +117,7 @@ class Json2Xls(object):
     def __fill_data(self, data):
         self.__check_dict_deep(data)
         for index, value in enumerate(data.values()):
-            self.sheet.row(self.title_start_row).write(index, value)
+            self.sheet.row(self.title_start_row).write(index, str(value))
 
         self.title_start_row += 1
 
@@ -139,3 +139,9 @@ if __name__ == '__main__':
         {"name": "Alice", "age": 18, "sex": "female"}
     ]'''
     Json2Xls('test.xls', url_or_json)
+    params = {
+                'location': u'上海',
+                'output': 'json',
+                'ak': '5slgyqGDENN7Sy7pw29IUvrZ'
+            }
+    Json2Xls('test2.xls', "http://api.map.baidu.com/telematics/v3/weather", params=params)

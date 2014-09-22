@@ -21,7 +21,9 @@ excel:
     18  | Alice| female
 
 
-* 根据请求url返回的json生成excel
+* 根据请求url返回的json生成excel, 支持get和post，默认为get
+
+get请求参数为params={}, post请求参数为data={}
 
 code:
 
