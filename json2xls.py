@@ -14,6 +14,9 @@ XLS_COLORS = [
     'magenta_ega', 'lime', 'blue', 'grey40',
     'pink', 'grey25', 'rose', 'white', 'black',
     'silver_ega', 'gray50', 'periwinkle',
+    'magenta_ega', 'lime', 'blue', 'grey40',
+    'pink', 'grey25', 'rose', 'white', 'black',
+    'silver_ega', 'gray50', 'periwinkle',
     'sea_green', 'orange', 'red', 'grey80',
     'dark_teal', 'brown', 'ivory', 'bright_green',
     'ocean_blue', 'dark_blue_ega', 'dark_yellow',
@@ -38,23 +41,24 @@ class Json2Xls(object):
         self.book = Workbook(encoding='utf-8')
         self.sheet = self.book.add_sheet(self.sheet_name)
         self.title_color = title_color
+
         self.title_start_col = 0
         self.title_start_row = 0
-        self.title_merge_info = {}
 
         self.font = Font()
         self.font.name = font_name
         self.font.bold = True
-
-        self.pattern = Pattern()
-        self.pattern.pattern = Pattern.SOLID_PATTERN
-        self.pattern.pattern_fore_colour = Style.colour_map[self.title_color]
 
         self.borders = Borders()
         self.borders.left = 1
         self.borders.right = 1
         self.borders.top = 1
         self.borders.bottom = 1
+
+
+        self.pattern = Pattern()
+        self.pattern.pattern = Pattern.SOLID_PATTERN
+        self.pattern.pattern_fore_colour = Style.colour_map[self.title_color]
 
         self.title_style = XFStyle()
         self.title_style.font = self.font
@@ -100,6 +104,7 @@ class Json2Xls(object):
 
         self.title_start_row += 1
 
+
     def make(self):
         data = self.__get_json()
         if not isinstance(data, (dict, list)):
@@ -117,6 +122,5 @@ url_or_json = '''[{"name": "John", "age": 30,
  {"name": "Alice", "age": 18,
   "sex": "female"}
 ]'''
-j = Json2Xls("http://142.4.209.29:9080/ask/%E6%88%91%E6%83%B3%E8%87%AA%E6%9D%80")
+j = Json2Xls(url_or_json)
 j.make()
-
