@@ -30,9 +30,11 @@ XLS_COLORS = [
 
 class Json2Xls(object):
 
-    def __init__(self, url_or_json, method='get', params=None, data=None, headers=None,
+    def __init__(self, url_or_json, filename, method='get',
+                 params=None, data=None, headers=None,
                  sheet_name='sheet0', title_color='lime', font_name='Arial'):
         self.sheet_name = sheet_name
+        self.filename = filename
         self.url_or_json = url_or_json
         self.method = method
         self.params = params
@@ -65,10 +67,20 @@ class Json2Xls(object):
         self.title_style.borders = self.borders
         self.title_style.pattern = self.pattern
 
+        self.__check_file_suffix()
+
     def __parse_dict_depth(self, d, depth=0):
         if not isinstance(d, dict) or not d:
             return depth
-        return max(self.__parse_dict_depth(v, depth + 1) for k, v in d.iteritems())
+        return max(self.__parse_dict_depth(v, depth + 1)
+                   for k, v in d.iteritems())
+
+    def __check_file_suffix(self):
+        suffix = self.filename.split('.')[-1]
+        if '.' not in self.filename:
+            self.filename += '.xls'
+        elif suffix not in ['xls', 'xlsx']:
+            raise Exception('filename format must be .xls/.xlsx')
 
     def __check_dict_deep(self, d):
         depth = self.__parse_dict_depth(d)
@@ -82,10 +94,13 @@ class Json2Xls(object):
         except:
             try:
                 if self.method.lower() == 'get':
-                    resp = requests.get(self.url_or_json, params=self.params, headers=self.headers)
+                    resp = requests.get(self.url_or_json,
+                                        params=self.params,
+                                        headers=self.headers)
                     data = resp.json()
                 else:
-                    resp = requests.post(self.url_or_json, data=self.data, headers=self.headers)
+                    resp = requests.post(self.url_or_json,
+                                         data=self.data, headers=self.headers)
                     data = resp.json()
             except Exception as e:
                 print e
@@ -94,7 +109,8 @@ class Json2Xls(object):
     def __fill_title(self, data):
         self.__check_dict_deep(data)
         for index, key in enumerate(data.keys()):
-            self.sheet.row(self.title_start_row).write(index, key, self.title_style)
+            self.sheet.row(self.title_start_row).write(index,
+                                                       key, self.title_style)
         self.title_start_row += 1
 
     def __fill_data(self, data):
@@ -114,12 +130,12 @@ class Json2Xls(object):
         self.__fill_title(data[0])
         for d in data:
             self.__fill_data(d)
-        self.book.save("test.xls")
+        self.book.save(self.filename)
 
 if __name__ == '__main__':
     url_or_json = '''[
         {"name": "John", "age": 30, "sex": "male"},
         {"name": "Alice", "age": 18, "sex": "female"}
     ]'''
-    j = Json2Xls(url_or_json)
+    j = Json2Xls(url_or_json, 'test.xls')
     j.make()
