@@ -30,7 +30,7 @@ XLS_COLORS = [
 
 class Json2Xls(object):
 
-    def __init__(self, url_or_json, filename, method='get',
+    def __init__(self, filename, url_or_json, method='get',
                  params=None, data=None, headers=None,
                  sheet_name='sheet0', title_color='lime', font_name='Arial'):
         self.sheet_name = sheet_name
@@ -68,6 +68,7 @@ class Json2Xls(object):
         self.title_style.pattern = self.pattern
 
         self.__check_file_suffix()
+        self.__make()
 
     def __parse_dict_depth(self, d, depth=0):
         if not isinstance(d, dict) or not d:
@@ -120,7 +121,7 @@ class Json2Xls(object):
 
         self.title_start_row += 1
 
-    def make(self):
+    def __make(self):
         data = self.__get_json()
         if not isinstance(data, (dict, list)):
             raise Exception('bad json format')
@@ -137,5 +138,4 @@ if __name__ == '__main__':
         {"name": "John", "age": 30, "sex": "male"},
         {"name": "Alice", "age": 18, "sex": "female"}
     ]'''
-    j = Json2Xls(url_or_json, 'test.xls')
-    j.make()
+    Json2Xls('test.xls', url_or_json)
