@@ -35,6 +35,7 @@ class Json2Xls(object):
         self.title_start_col = 0
         self.title_start_row = 0
         self.title_merge_info = {}
+        self.data_start_row = 0
 
         self.font = Font()
         self.font.name = font_name
@@ -52,25 +53,38 @@ class Json2Xls(object):
         for key, value in data.items():
             if isinstance(value, dict):
                 value_len = len(value)
-                if parent and value_len > self.title_merge_info[parent]['len']:
-                    self.title_merge_info[parent]['len'] = value_len
+                if value_len > len(data[key]):
+                    self.title_merge_info[key]['len'] = value_len
                 else:
-                    self.title_merge_info.update({key: {'len': len(value), 'parent':parent}})
+                    self.title_merge_info.update({key: len(value)})
                     self.__parse_merge_info(value, parent=key)
+            else:
+                if not parent:
+                    self.title_merge_info.update({key: 1})
 
     def __genarate_title(self, data):
+        self.__parse_merge_info(data)
         for key_col, key_name in enumerate(data.keys()):
             self.sheet.write_merge(
                 self.title_start_row,
                 self.title_start_row,
                 self.title_start_col,
-                self.title_start_col + self.title_merge_len - 1,
+                self.title_start_col + self.title_merge_info[key_name] - 1,
                 key_name,
                 self.title_style
             )
-            self.title_start_col += self.title_merge_len
+            self.title_start_col += self.title_merge_info[key_name]
 
-    def json2xls(self):
+    def __fill_data(self, data):
+        for index, key_name in enumerate(self.title_merge_info.keys()):
+            if isinstance(data[key_name], dict):
+                for index1, value in enumerate(data[key_name].values()):
+                    self.sheet.row(self.data_start_row).write(index1 + index, value)
+            else:
+                self.sheet.row(self.data_start_row).write(index, data[key_name])
+        self.data_start_row += 1
+
+    def make(self):
         data = json.loads(self.json_data)
         if not isinstance(data, (dict, list)):
             raise Exception('bad json format')
@@ -78,9 +92,12 @@ class Json2Xls(object):
             data = [data]
 
         self.__genarate_title(data[0])
+        self.data_start_row = len(self.title_merge_info) - 1
+        for d in data:
+            self.__fill_data(d)
         self.book.save("test.xls")
 
-#json_data = '{"title": {"tag": "im title tag", "ner": "im title ner"}, "body":{"tag": "im body tag", "ner": "im body ner"}}'
-#j = Json2Xls(json_data)
-#j.json2xls()
+json_data = '[{"title": {"tag": "im xtitle tag", "ner": "im xtitle ner"}, "body":{"tag": "im xbody tag"}}, {"title": {"tag": "im title tag", "ner": "im title ner"}, "body":{"tag": "im body tag"}}]'
+j = Json2Xls(json_data)
+j.make()
 
