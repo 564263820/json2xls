@@ -13,6 +13,10 @@ code:
     json_data = '{"name": "ashin", "age": 16, "sex": "male"}'
     Json2Xls('test.xls', json_data)
 
+command:
+
+    python json2xls.py test3.xls '{"a":"a", "b":"b"}'
+
 excel:
 
     age | name | sex
@@ -33,14 +37,13 @@ code:
     url = 'http://api.bosonnlp.com/sentiment/analysis'
     Json2Xls('test.xlsx', url, method='post')
 
+command:
+
+    python json2xls.py test.xls http://api.map.baidu.com/telematics/v3/weather\?location\=%E4%B8%8A%E6%B5%B7\&output\=json\&ak\=640f3985a6437dad8135dae98d775a09
+
 excel:
 
     status | message
     -------|--------
     403    | no token header
 
-
-command:
-
-    python json2xls.py test.xls http://api.map.baidu.com/telematics/v3/weather\?location\=%E4%B8%8A%E6%B5%B7\&output\=json\&ak\=640f3985a6437dad8135dae98d775a09
-    python json2xls.py test3.xls '{"a":"a", "b":"b"}'
