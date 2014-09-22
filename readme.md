@@ -3,7 +3,7 @@ Json2Xls:根据json数据生成excel表格
 
 Json2Xls不支持多层套嵌的json数据，只可以根据一层json生成表格
 
-* 根据json数据生成excel
+**根据json数据生成excel**
 
 code:
 
@@ -21,9 +21,8 @@ excel:
     18  | Alice| female
 
 
-* 根据请求url返回的json生成excel, 支持get和post，默认为get
-
-get请求参数为params={}, post请求参数为data={}
+**根据请求url返回的json生成excel**
+默认请求为get，get请求参数为params={}, post请求参数为data={}
 
 code:
 
