@@ -2,6 +2,7 @@
 #-*- coding:utf-8 -*-
 import json
 import requests
+import click
 from xlwt import Workbook, XFStyle, Style, Font, Pattern, Borders
 
 XLS_COLORS = [
