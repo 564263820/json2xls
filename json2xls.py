@@ -41,10 +41,13 @@ class Json2Xls(object):
         self.params = params
         self.data = data
         self.headers = headers
+        self.title_color = title_color
+
+        self.__check_color()
+        self.__check_file_suffix()
 
         self.book = Workbook(encoding='utf-8')
         self.sheet = self.book.add_sheet(self.sheet_name)
-        self.title_color = title_color
 
         self.title_start_col = 0
         self.title_start_row = 0
@@ -68,7 +71,6 @@ class Json2Xls(object):
         self.title_style.borders = self.borders
         self.title_style.pattern = self.pattern
 
-        self.__check_file_suffix()
         self.__make()
 
     def __parse_dict_depth(self, d, depth=0):
@@ -76,6 +78,10 @@ class Json2Xls(object):
             return depth
         return max(self.__parse_dict_depth(v, depth + 1)
                    for k, v in d.iteritems())
+
+    def __check_color(self):
+        if self.title_color not in XLS_COLORS:
+            raise Exception('your color is not supported')
 
     def __check_file_suffix(self):
         suffix = self.filename.split('.')[-1]
@@ -134,15 +140,21 @@ class Json2Xls(object):
             self.__fill_data(d)
         self.book.save(self.filename)
 
+
+@click.command()
+@click.argument('filename')
+@click.argument('source')
+@click.option('--method', '-m', default='get')
+@click.option('--params', '-p', default=None)
+@click.option('--data', '-d', default=None)
+@click.option('--headers', '-h', default=None)
+@click.option('--sheet', '-s', default='sheet0')
+@click.option('--color', '-c', default='lime')
+@click.option('--font', '-f', default='Arial')
+def make(filename, source, method, params, data, headers, sheet, color, font):
+    Json2Xls(filename, source, method=method, params=params,
+             data=data, headers=headers, sheet_name=sheet,
+             title_color=color, font_name=font)
+
 if __name__ == '__main__':
-    url_or_json = '''[
-        {"name": "John", "age": 30, "sex": "male"},
-        {"name": "Alice", "age": 18, "sex": "female"}
-    ]'''
-    Json2Xls('test.xls', url_or_json)
-    params = {
-                'location': u'上海',
-                'output': 'json',
-                'ak': '5slgyqGDENN7Sy7pw29IUvrZ'
-            }
-    Json2Xls('test2.xls', "http://api.map.baidu.com/telematics/v3/weather", params=params)
+    make()

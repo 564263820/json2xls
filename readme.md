@@ -39,3 +39,8 @@ excel:
     -------|--------
     403    | no token header
 
+
+command:
+
+    python json2xls.py test.xls http://api.map.baidu.com/telematics/v3/weather\?location\=%E4%B8%8A%E6%B5%B7\&output\=json\&ak\=640f3985a6437dad8135dae98d775a09
+    python json2xls.py test3.xls '{"a":"a", "b":"b"}'
