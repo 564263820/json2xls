@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 import json
-from xlwt import Workbook, XFStyle, Style, Font, Pattern
+from xlwt import Workbook, XFStyle, Style, Font, Pattern, Borders
 
 XLS_COLORS = [
     'gray_ega', 'dark_green', 'indigo',
@@ -40,11 +40,20 @@ class Json2Xls(object):
         self.font = Font()
         self.font.name = font_name
         self.font.bold = True
+
         self.pattern = Pattern()
         self.pattern.pattern = Pattern.SOLID_PATTERN
         self.pattern.pattern_fore_colour = Style.colour_map[self.title_color]
+
+        self.borders = Borders()
+        self.borders.left = 1
+        self.borders.right = 1
+        self.borders.top = 1
+        self.borders.bottom = 1
+
         self.title_style = XFStyle()
         self.title_style.font = self.font
+        self.title_style.borders = self.borders
         self.title_style.pattern = self.pattern
 
 
