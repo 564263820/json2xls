@@ -17,6 +17,9 @@ command:
 
     python json2xls.py test3.xls '{"a":"a", "b":"b"}'
 
+    # from file
+    python json2xls.py test3.xls "`cat data.json`"
+
 excel:
 
     age | name | sex
