@@ -30,7 +30,8 @@ XLS_COLORS = [
 
 class Json2Xls(object):
 
-    def __init__(self, url_or_json, method='get', params=None, data=None, headers=None, sheet_name='sheet0', title_color='lime', font_name='Arial'):
+    def __init__(self, url_or_json, method='get', params=None, data=None, headers=None,
+                 sheet_name='sheet0', title_color='lime', font_name='Arial'):
         self.sheet_name = sheet_name
         self.url_or_json = url_or_json
         self.method = method
@@ -55,7 +56,6 @@ class Json2Xls(object):
         self.borders.top = 1
         self.borders.bottom = 1
 
-
         self.pattern = Pattern()
         self.pattern.pattern = Pattern.SOLID_PATTERN
         self.pattern.pattern_fore_colour = Style.colour_map[self.title_color]
@@ -68,7 +68,7 @@ class Json2Xls(object):
     def __parse_dict_depth(self, d, depth=0):
         if not isinstance(d, dict) or not d:
             return depth
-        return max(self.__parse_dict_depth(v, depth+1) for k, v in d.iteritems())
+        return max(self.__parse_dict_depth(v, depth + 1) for k, v in d.iteritems())
 
     def __check_dict_deep(self, d):
         depth = self.__parse_dict_depth(d)
@@ -104,7 +104,6 @@ class Json2Xls(object):
 
         self.title_start_row += 1
 
-
     def make(self):
         data = self.__get_json()
         if not isinstance(data, (dict, list)):
@@ -117,10 +116,10 @@ class Json2Xls(object):
             self.__fill_data(d)
         self.book.save("test.xls")
 
-url_or_json = '''[{"name": "John", "age": 30,
-  "sex": "male"},
- {"name": "Alice", "age": 18,
-  "sex": "female"}
-]'''
-j = Json2Xls(url_or_json)
-j.make()
+if __name__ == '__main__':
+    url_or_json = '''[
+        {"name": "John", "age": 30, "sex": "male"},
+        {"name": "Alice", "age": 18, "sex": "female"}
+    ]'''
+    j = Json2Xls(url_or_json)
+    j.make()
