@@ -1,3 +1,20 @@
+===============================
+json2xls
+===============================
+
+.. image:: https://badge.fury.io/py/json2xls.png
+    :target: http://badge.fury.io/py/json2xls
+
+.. image:: https://travis-ci.org/axiaoxin/json2xls.png?branch=master
+        :target: https://travis-ci.org/axiaoxin/json2xls
+
+.. image:: https://pypip.in/d/json2xls/badge.png
+        :target: https://pypi.python.org/pypi/json2xls
+
+
+generate excel by json @ https://github.com/axiaoxin/json2xls
+
+
 Json2Xls:根据json数据生成excel表格
 ==================================
 
@@ -50,3 +67,12 @@ excel:
     -------|--------
     403    | no token header
 
+
+
+
+* Free software: BSD license
+
+Features
+--------
+
+* TODO
