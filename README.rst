@@ -1,5 +1,5 @@
-json2xls:根据json数据生成excel表格
-==================================
+json2xls:根据json数据生成excel表格(generate excel by json)
+=========================================================
 
 .. image:: https://badge.fury.io/py/json2xls.png
     :target: http://badge.fury.io/py/json2xls
@@ -10,7 +10,6 @@ json2xls:根据json数据生成excel表格
 .. image:: https://pypip.in/d/json2xls/badge.png
         :target: https://pypi.python.org/pypi/json2xls
 
-generate excel by json
 
 json2xls不支持多层套嵌的json数据，只可以根据一层json生成表格
 
@@ -33,10 +32,12 @@ command:
 
 excel:
 
-    age | name | sex
-    ----|------|----
-    30  | John | male
-    18  | Alice| female
+    ==== ===== ======
+    age  name  sex
+    ==== ===== ======
+    30   John  male
+    18   Alice female
+    ==== ===== ======
 
 
 **根据请求url返回的json生成excel**
@@ -57,10 +58,11 @@ command:
 
 excel:
 
-    status | message
-    -------|--------
-    403    | no token header
-
+    ======= ================
+    status  message
+    ======= ================
+    403     no token header
+    ======= ================
 
 
 
