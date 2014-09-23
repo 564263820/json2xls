@@ -6,6 +6,10 @@ json2xls:根据json数据生成excel表格
 
 json2xls不支持多层套嵌的json数据，只可以根据一层json生成表格
 
+**安装**
+
+    pip install json2xls
+
 **根据json数据生成excel**
 
 code:
