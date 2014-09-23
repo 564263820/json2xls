@@ -1,6 +1,5 @@
-===============================
-json2xls
-===============================
+json2xls:根据json数据生成excel表格
+==================================
 
 .. image:: https://badge.fury.io/py/json2xls.png
     :target: http://badge.fury.io/py/json2xls
@@ -11,14 +10,9 @@ json2xls
 .. image:: https://pypip.in/d/json2xls/badge.png
         :target: https://pypi.python.org/pypi/json2xls
 
+generate excel by json
 
-generate excel by json @ https://github.com/axiaoxin/json2xls
-
-
-Json2Xls:根据json数据生成excel表格
-==================================
-
-Json2Xls不支持多层套嵌的json数据，只可以根据一层json生成表格
+json2xls不支持多层套嵌的json数据，只可以根据一层json生成表格
 
 **根据json数据生成excel**
 
