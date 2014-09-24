@@ -72,7 +72,6 @@ class Json2Xls(object):
         self.title_style.borders = self.borders
         self.title_style.pattern = self.pattern
 
-        self.__make()
 
     def __parse_dict_depth(self, d, depth=0):
         if not isinstance(d, dict) or not d:
@@ -130,21 +129,34 @@ class Json2Xls(object):
     def __fill_data(self, data):
         self.__check_dict_deep(data)
         for index, value in enumerate(data.values()):
+            if isinstance(value, basestring):
+                value = value.encode('utf-8')
+            else:
+                value = str(value)
             self.sheet.col(index).width = (len(value) + 1) * 256
             self.sheet.row(self.title_start_row).write(index, str(value))
 
         self.title_start_row += 1
 
-    def __make(self):
+    def make(self, title_callback=None, body_callback=None):
         data = self.__get_json()
         if not isinstance(data, (dict, list)):
             raise Exception('bad json format')
         if isinstance(data, dict):
             data = [data]
 
-        self.__fill_title(data[0])
-        for d in data:
-            self.__fill_data(d)
+        if title_callback != None:
+            title_callback(self, data[0])
+        else:
+            self.__fill_title(data[0])
+
+        if body_callback != None:
+            for d in data:
+                body_callback(self, d)
+        else:
+            for d in data:
+                self.__fill_data(d)
+
         self.book.save(self.filename)
 
 
@@ -163,7 +175,7 @@ def make(filename, source, method, params, data, headers, sheet, color, font):
         headers = eval(headers)
     Json2Xls(filename, source, method=method, params=params,
              data=data, headers=headers, sheet_name=sheet,
-             title_color=color, font_name=font)
+             title_color=color, font_name=font).make()
 
 if __name__ == '__main__':
     make()

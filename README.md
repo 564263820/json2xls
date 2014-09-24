@@ -4,7 +4,6 @@ json2xls:根据json数据生成excel表格
 [![](https://badge.fury.io/py/json2xls.png)](http://badge.fury.io/py/json2xls)
 [![](https://pypip.in/d/json2xls/badge.png)](https://pypi.python.org/pypi/json2xls)
 
-json2xls不支持多层套嵌的json数据，只可以根据一层json生成表格
 
 **安装**
 
@@ -18,7 +17,7 @@ code:
     from json2xls import Json2Xls
 
     json_data = '{"name": "ashin", "age": 16, "sex": "male"}'
-    Json2Xls('test.xls', json_data)
+    Json2Xls('test.xls', json_data).make()
 
 command:
 
@@ -49,7 +48,7 @@ code:
     from json2xls import Json2Xls
 
     url = 'http://api.bosonnlp.com/sentiment/analysis'
-    Json2Xls('test.xlsx', url, method='post')
+    Json2Xls('test.xlsx', url, method='post').make()
 
 command:
 
@@ -60,4 +59,19 @@ excel:
     status | message
     -------|--------
     403    | no token header
+
+**自定义title和body的生成**
+
+只需定义`title_callback`和`body_callback`方法，在调用`make`的时候传入即可。
+
+    :::python
+    def title_callback(obj, data):
+        '''use one data record to generate excel title'''
+        for index, key in enumerate(data.keys()):
+            obj.sheet.row(obj.title_start_row).write(index,
+                                                     'new:' + key.encode('utf-8'), obj.title_style)
+        obj.title_start_row += 1
+
+    j = Json2Xls('../test_data/title_callback.xls', "../test_data/sentiment_output.json")
+    j.make(title_callback=title_callback)
 
