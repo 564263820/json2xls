@@ -81,7 +81,7 @@ excel:
         self.sheet.row(2).write(6, 'x', self.title_style)
         self.sheet.row(2).write(7, 'y', self.title_style)
 
-        self.title_start_row += 3
+        self.start_row += 3
 
 
     def body_callback(self, data):
@@ -95,16 +95,16 @@ excel:
                 if j != 'comment':
                     value = ', '.join(data[ii][i][j])
                     self.sheet.col(col).width = (len(value) + 1) * 256
-                    self.sheet.row(self.title_start_row).write(col, value)
+                    self.sheet.row(self.start_row).write(col, value)
                     col += 1
                 else:
                     for x in data[ii][i][j].values():
                         width = self.sheet.col(col).width
                         new_width = (len(x) + 1) * 256
                         self.sheet.col(col).width = width if width > new_width else new_width
-                        self.sheet.row(self.title_start_row).write(col, x)
+                        self.sheet.row(self.start_row).write(col, x)
                         col += 1
-        self.title_start_row += 1
+        self.start_row += 1
 
 
     data = '''[

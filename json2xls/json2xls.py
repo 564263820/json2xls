@@ -26,7 +26,7 @@ class Json2Xls(object):
         self.book = Workbook(encoding='utf-8')
         self.sheet = self.book.add_sheet(self.sheet_name)
 
-        self.title_start_row = 0
+        self.start_row = 0
 
         self.title_style = xlwt.easyxf(title_style or
                                        'font: name Arial, bold on;'
@@ -68,9 +68,9 @@ class Json2Xls(object):
     def __fill_title(self, data):
         for index, key in enumerate(data.keys()):
             self.sheet.col(index).width = (len(key) + 1) * 256
-            self.sheet.row(self.title_start_row).write(index,
+            self.sheet.row(self.start_row).write(index,
                                                        key, self.title_style)
-        self.title_start_row += 1
+        self.start_row += 1
 
     def __fill_data(self, data):
         for index, value in enumerate(data.values()):
@@ -81,9 +81,9 @@ class Json2Xls(object):
             width = self.sheet.col(index).width
             new_width = (len(value) + 1) * 256
             self.sheet.col(index).width = width if width > new_width else new_width
-            self.sheet.row(self.title_start_row).write(index, str(value))
+            self.sheet.row(self.start_row).write(index, str(value))
 
-        self.title_start_row += 1
+        self.start_row += 1
 
     def make(self, title_callback=None, body_callback=None):
         data = self.__get_json()
