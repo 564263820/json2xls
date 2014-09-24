@@ -122,6 +122,7 @@ class Json2Xls(object):
     def __fill_title(self, data):
         self.__check_dict_deep(data)
         for index, key in enumerate(data.keys()):
+            self.sheet.col(index).width = (len(key) + 1) * 256
             self.sheet.row(self.title_start_row).write(index,
                                                        key, self.title_style)
         self.title_start_row += 1
@@ -129,6 +130,7 @@ class Json2Xls(object):
     def __fill_data(self, data):
         self.__check_dict_deep(data)
         for index, value in enumerate(data.values()):
+            self.sheet.col(index).width = (len(value) + 1) * 256
             self.sheet.row(self.title_start_row).write(index, str(value))
 
         self.title_start_row += 1
