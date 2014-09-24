@@ -78,7 +78,9 @@ class Json2Xls(object):
                 value = value.encode('utf-8')
             else:
                 value = str(value)
-            self.sheet.col(index).width = (len(value) + 1) * 256
+            width = self.sheet.col(index).width
+            new_width = (len(value) + 1) * 256
+            self.sheet.col(index).width = width if width > new_width else new_width
             self.sheet.row(self.title_start_row).write(index, str(value))
 
         self.title_start_row += 1
