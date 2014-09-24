@@ -157,6 +157,8 @@ class Json2Xls(object):
 @click.option('--color', '-c', default='lime')
 @click.option('--font', '-f', default='Arial')
 def make(filename, source, method, params, data, headers, sheet, color, font):
+    if isinstance(headers, basestring):
+        headers = eval(headers)
     Json2Xls(filename, source, method=method, params=params,
              data=data, headers=headers, sheet_name=sheet,
              title_color=color, font_name=font)
