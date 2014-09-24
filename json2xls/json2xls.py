@@ -72,13 +72,6 @@ class Json2Xls(object):
         self.title_style.borders = self.borders
         self.title_style.pattern = self.pattern
 
-
-    def __parse_dict_depth(self, d, depth=0):
-        if not isinstance(d, dict) or not d:
-            return depth
-        return max(self.__parse_dict_depth(v, depth + 1)
-                   for k, v in d.iteritems())
-
     def __check_color(self):
         if self.title_color not in XLS_COLORS:
             raise Exception('your color is not supported')
@@ -89,11 +82,6 @@ class Json2Xls(object):
             self.filename += '.xls'
         elif suffix not in ['xls', 'xlsx']:
             raise Exception('filename format must be .xls/.xlsx')
-
-    def __check_dict_deep(self, d):
-        depth = self.__parse_dict_depth(d)
-        if depth > 1:
-            raise Exception("dict is too deep")
 
     def __get_json(self):
         data = None
@@ -119,7 +107,6 @@ class Json2Xls(object):
         return data
 
     def __fill_title(self, data):
-        self.__check_dict_deep(data)
         for index, key in enumerate(data.keys()):
             self.sheet.col(index).width = (len(key) + 1) * 256
             self.sheet.row(self.title_start_row).write(index,
@@ -127,7 +114,6 @@ class Json2Xls(object):
         self.title_start_row += 1
 
     def __fill_data(self, data):
-        self.__check_dict_deep(data)
         for index, value in enumerate(data.values()):
             if isinstance(value, basestring):
                 value = value.encode('utf-8')
