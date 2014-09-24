@@ -62,7 +62,7 @@ excel:
 
 **自定义title和body的生成**
 
-只需定义`title_callback`和`body_callback`方法，在调用`make`的时候传入即可。
+默认只支持一层json的excel生成，如果是多层套嵌的json，请自定义生成title和body，只需定义`title_callback`和`body_callback`方法，在调用`make`的时候传入即可。
 
     :::python
     def title_callback(obj, data):
