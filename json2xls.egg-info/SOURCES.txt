@@ -3,6 +3,7 @@ CONTRIBUTING.rst
 HISTORY.rst
 LICENSE
 MANIFEST.in
+README.md
 setup.cfg
 setup.py
 docs/Makefile
@@ -25,5 +26,6 @@ json2xls.egg-info/requires.txt
 json2xls.egg-info/top_level.txt
 tests/__init__.py
 tests/data.json
+tests/data2.json
 tests/test_json2xls.py
 tests/tests.py
