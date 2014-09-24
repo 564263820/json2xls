@@ -22,11 +22,14 @@ code:
 
 command:
 
-    python json2xls.py test3.xls '{"a":"a", "b":"b"}'
-    python json2xls.py test3.xls '[{"a":"a", "b":"b"},{"a":1, "b":2}]'
+    python json2xls.py test.xls '{"a":"a", "b":"b"}'
+    python json2xls.py test.xls '[{"a":"a", "b":"b"},{"a":1, "b":2}]'
 
-    # from file
-    python json2xls.py test3.xls "`cat data.json`"
+    # from file: json of text
+    python json2xls.py test.xls "`cat data.json`"
+
+    # from file: json of line
+    python json2xls.py test.xls data2.json
 
 excel:
 

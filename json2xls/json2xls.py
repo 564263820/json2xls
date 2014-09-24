@@ -2,6 +2,7 @@
 #-*- coding:utf-8 -*-
 import json
 import requests
+import os
 import click
 from xlwt import Workbook, XFStyle, Style, Font, Pattern, Borders
 
@@ -100,18 +101,22 @@ class Json2Xls(object):
         try:
             data = json.loads(self.url_or_json)
         except:
-            try:
-                if self.method.lower() == 'get':
-                    resp = requests.get(self.url_or_json,
-                                        params=self.params,
-                                        headers=self.headers)
-                    data = resp.json()
-                else:
-                    resp = requests.post(self.url_or_json,
-                                         data=self.data, headers=self.headers)
-                    data = resp.json()
-            except Exception as e:
-                print e
+            if os.path.isfile(self.url_or_json):
+                with open(self.url_or_json, 'r') as source:
+                    data = [json.loads(line) for line in source]
+            else:
+                try:
+                    if self.method.lower() == 'get':
+                        resp = requests.get(self.url_or_json,
+                                            params=self.params,
+                                            headers=self.headers)
+                        data = resp.json()
+                    else:
+                        resp = requests.post(self.url_or_json,
+                                             data=self.data, headers=self.headers)
+                        data = resp.json()
+                except Exception as e:
+                    print e
         return data
 
     def __fill_title(self, data):
