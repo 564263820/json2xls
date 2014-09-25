@@ -106,7 +106,7 @@ excel:
         for col, value in enumerate(values):
             try:
                 self.sheet.row(self.start_row).height_mismatch = True
-                self.sheet.row(self.start_row).height = value.count('\n')
+                self.sheet.row(self.start_row).height = 0
                 width = self.sheet.col(col).width
                 new_width = (len(value) + 1) * 256
                 self.sheet.col(col).width = width if width > new_width else new_width
