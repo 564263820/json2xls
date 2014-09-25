@@ -11,7 +11,7 @@ from xlwt import Workbook
 class Json2Xls(object):
 
     def __init__(self, filename, url_or_json, method='get',
-                 params=None, data=None, headers=None,
+                 params=None, data=None, headers=None, form_encoded=False,
                  sheet_name='sheet0', title_style=None):
         self.sheet_name = sheet_name
         self.filename = filename
@@ -20,6 +20,7 @@ class Json2Xls(object):
         self.params = params
         self.data = data
         self.headers = headers
+        self.form_encoded = form_encoded
 
         self.__check_file_suffix()
 
@@ -58,6 +59,11 @@ class Json2Xls(object):
                                             headers=self.headers)
                         data = resp.json()
                     else:
+                        if os.path.isfile(self.data):
+                            with open(self.data, 'r') as source:
+                                self.data = [json.loads(line) for line in source]
+                        if not self.form_encoded:
+                            self.data = json.dumps(self.data)
                         resp = requests.post(self.url_or_json,
                                              data=self.data, headers=self.headers)
                         data = resp.json()
@@ -115,12 +121,13 @@ class Json2Xls(object):
 @click.option('--data', '-d', default=None)
 @click.option('--headers', '-h', default=None)
 @click.option('--sheet', '-s', default='sheet0')
-@click.option('--style', '-t', default=None)
-def make(filename, source, method, params, data, headers, sheet, style):
+@click.option('--style', '-S', default=None)
+@click.option('--form_encoded', '-f', is_flag=True)
+def make(filename, source, method, params, data, headers, sheet, style, form_encoded):
     if isinstance(headers, basestring):
         headers = eval(headers)
     Json2Xls(filename, source, method=method, params=params,
-             data=data, headers=headers, sheet_name=sheet,
+             data=data, headers=headers, form_encoded=form_encoded, sheet_name=sheet,
              title_style=style).make()
 
 if __name__ == '__main__':

@@ -24,10 +24,10 @@ command:
     python json2xls.py test.xls '{"a":"a", "b":"b"}'
     python json2xls.py test.xls '[{"a":"a", "b":"b"},{"a":1, "b":2}]'
 
-    # from file: json of text
+    # from file: 文件内容为一个完整的json
     python json2xls.py test.xls "`cat data.json`"
 
-    # from file: json of line
+    # from file: 文件内容为每行一个json
     python json2xls.py test.xls data2.json
 
 excel:
@@ -40,7 +40,7 @@ excel:
 
 **根据请求url返回的json生成excel**
 
-默认请求为get，get请求参数为params={}, post请求参数为data={}
+默认请求为get，get请求参数为`params`, post请求参数为`data`, post的`-d`参数的json数据可以用字符串或文件
 
 code:
 
@@ -52,7 +52,8 @@ code:
 
 command:
 
-    python json2xls.py test.xls http://api.map.baidu.com/telematics/v3/weather\?location\=%E4%B8%8A%E6%B5%B7\&output\=json\&ak\=640f3985a6437dad8135dae98d775a09
+    python json2xls.py test.xls http://api.bosonnlp.com/sentiment/analysis
+    python json2xls.py test.xls http://api.bosonnlp.com/ner/analysis -m post -d '"我是傻逼"' -h "{'X-Token': 'bosontokenheader'}"
 
 excel:
 
@@ -62,7 +63,7 @@ excel:
 
 **自定义title和body的生成**
 
-默认只支持一层json的excel生成，且每天记录字段都相同。如果是多层套嵌的json，请自定义生成title和body，只需定义`title_callback`和`body_callback`方法，在调用`make`的时候传入即可。
+默认只支持一层json的excel生成，且每条记录字段都相同。如果是多层套嵌的json，请自定义生成title和body，只需定义`title_callback`和`body_callback`方法，在调用`make`的时候传入即可。
 
     :::python
     def title_callback(self, data):
