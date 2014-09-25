@@ -73,7 +73,10 @@ class Json2Xls(object):
 
     def __fill_title(self, data):
         for index, key in enumerate(data.keys()):
-            self.sheet.col(index).width = (len(key) + 1) * 256
+            try:
+                self.sheet.col(index).width = (len(key) + 1) * 256
+            except:
+                pass
             self.sheet.row(self.start_row).write(index,
                                                        key, self.title_style)
         self.start_row += 1
@@ -84,9 +87,12 @@ class Json2Xls(object):
                 value = value.encode('utf-8')
             else:
                 value = str(value)
-            width = self.sheet.col(index).width
-            new_width = (len(value) + 1) * 256
-            self.sheet.col(index).width = width if width > new_width else new_width
+            try:
+                width = self.sheet.col(index).width
+                new_width = (len(value) + 1) * 256
+                self.sheet.col(index).width = width if width > new_width else new_width
+            except:
+                pass
             self.sheet.row(self.start_row).write(index, str(value))
 
         self.start_row += 1
