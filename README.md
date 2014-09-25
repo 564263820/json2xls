@@ -13,7 +13,7 @@ or
 
     python setup.py install
 
-**根据json数据生成excel**
+**根据json数据生成excel**(每条json字段都相同)
 
 code:
 
@@ -67,12 +67,13 @@ excel:
 
 **自定义title和body的生成**
 
-默认只支持一层json的excel生成，且每条记录字段都相同。如果是多层套嵌的json，请自定义生成title和body，只需编写`title_callback`和`body_callback`方法，在调用`make`的时候传入即可。
+默认只支持一层json的excel生成，且每条记录字段都相同。如果是多层套嵌的json，请自定义生成title和body，只需编写`title_callback`和`body_callback`方法，在调用`make`的时候传入即可。对于`body_callback`只需关注某一行记录的插入方式即可。
 
     :::python
     #!/usr/bin/env python
     #-*- coding:utf-8 -*-
     import json
+    import xlwt
     from json2xls import Json2Xls
 
 
@@ -99,9 +100,12 @@ excel:
         values.append(data['input']['meta']['forum']['text'])
         values.append(data['input']['meta']['author']['model'])
         values.append(str(data['input']['meta']['author']['verified_owner']))
-        values.append('\n'.join(json.dumps(x, ensure_ascii=False) for x in data['output']['linked']))
-        values.append('\n'.join(json.dumps(x, ensure_ascii=False) for x in data['output']['meta']['title']['linked']))
-        values.append('\n'.join(json.dumps(x, ensure_ascii=False) for x in data['output']['meta']['forum']['linked']))
+        values.append('\n'.join(json.dumps(x, ensure_ascii=False)
+                                for x in data['output']['linked']))
+        values.append('\n'.join(json.dumps(x, ensure_ascii=False)
+                                for x in data['output']['meta']['title']['linked']))
+        values.append('\n'.join(json.dumps(x, ensure_ascii=False)
+                                for x in data['output']['meta']['forum']['linked']))
 
         for col, value in enumerate(values):
             try:
@@ -112,7 +116,7 @@ excel:
                 self.sheet.col(col).width = width if width > new_width else new_width
             except:
                 pass
-            self.sheet.row(self.start_row).write(col, value)
+            self.sheet.row(self.start_row).write(col, value, xlwt.easyxf('align: wrap on;'))
         self.start_row += 1
 
     j = Json2Xls('tests/normalization.xls', 'tests/normalization.json')
