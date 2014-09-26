@@ -4,6 +4,13 @@ json2xls:根据json数据生成excel表格
 [![](https://badge.fury.io/py/json2xls.png)](http://badge.fury.io/py/json2xls)
 [![](https://pypip.in/d/json2xls/badge.png)](https://pypi.python.org/pypi/json2xls)
 
+       _                 ____       _
+      (_)___  ___  _ __ |___ \__  _| |___
+      | / __|/ _ \| '_ \  __) \ \/ / / __|
+      | \__ \ (_) | | | |/ __/ >  <| \__ \
+     _/ |___/\___/|_| |_|_____/_/\_\_|___/
+    |__/
+
 
 **安装**
 
