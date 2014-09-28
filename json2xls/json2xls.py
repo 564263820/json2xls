@@ -24,7 +24,7 @@ class Json2Xls(object):
 
         self.__check_file_suffix()
 
-        self.book = Workbook(encoding='utf-8')
+        self.book = Workbook(encoding='utf-8', style_compression=2)
         self.sheet = self.book.add_sheet(self.sheet_name)
 
         self.start_row = 0
@@ -89,7 +89,7 @@ class Json2Xls(object):
                 value = str(value)
             try:
                 width = self.sheet.col(index).width
-                new_width = (len(value) + 1) * 256
+                new_width = min((len(value) + 1) * 256, 256 * 50)
                 self.sheet.col(index).width = width if width > new_width else new_width
             except:
                 pass
