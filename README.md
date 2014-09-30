@@ -1,5 +1,5 @@
-json2xls:根据json数据生成excel表格
-==================================
+json2xls:Generate Excel by JSON data
+====================================
 
 [![](https://badge.fury.io/py/json2xls.png)](http://badge.fury.io/py/json2xls)
 [![](https://pypip.in/d/json2xls/badge.png)](https://pypi.python.org/pypi/json2xls)
@@ -12,7 +12,7 @@ json2xls:根据json数据生成excel表格
     |__/
 
 
-**安装**
+**install**
 
     pip install json2xls
 
@@ -20,7 +20,7 @@ or
 
     python setup.py install
 
-**根据json数据生成excel**(每条json字段都相同)
+**generate excel by json string or json file**(each field in the json data is the same)
 
 code:
 
@@ -35,10 +35,10 @@ command:
     python json2xls.py test.xls '{"a":"a", "b":"b"}'
     python json2xls.py test.xls '[{"a":"a", "b":"b"},{"a":1, "b":2}]'
 
-    # from file: 文件内容为一个完整的json
+    # from file: whole file is a complete json data
     python json2xls.py test.xls "`cat tests/data.json`"
 
-    # from file: 文件内容为每行一个json
+    # from file: each line is a json data
     python json2xls.py test.xls tests/data2.json
 
 excel:
@@ -49,9 +49,11 @@ excel:
     18  | Alice| female
 
 
-**根据请求url返回的json生成excel**
+**generate excel by request the url which return json data**
 
-默认请求为get，get请求参数为`params`, post请求参数为`data`, post的`-d`参数的json数据可以用字符串或文件
+default request method is `get`, request argument pass by `params`.
+and the `post` method's request argument pass by `data`, you can use `-d` to pass request data in command line, the data should be json or file
+
 
 code:
 
@@ -72,9 +74,13 @@ excel:
     -------|--------
     403    | no token header
 
-**自定义title和body的生成**
+**Custom title and body**
 
-默认只支持一层json的excel生成，且每条记录字段都相同。如果是多层套嵌的json，请自定义生成title和body，只需编写`title_callback`和`body_callback`方法，在调用`make`的时候传入即可。对于`body_callback`只需关注某一行记录的插入方式即可。
+default only support one layer json to generate the excel. if you want custom it,
+you can write the `title_callback` function and `body_callback` function, the pass them in the `make` function.
+for the `body_callback`, you just need to care one line data's write way.
+
+example:
 
     :::python
     #!/usr/bin/env python
