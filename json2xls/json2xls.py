@@ -40,8 +40,8 @@ class Json2Xls(object):
         suffix = self.filename.split('.')[-1]
         if '.' not in self.filename:
             self.filename += '.xls'
-        elif suffix not in ['xls', 'xlsx']:
-            raise Exception('filename format must be .xls/.xlsx')
+        elif suffix != 'xls':
+            raise Exception('filename suffix must be .xls')
 
     def __get_json(self):
         data = None
@@ -96,6 +96,16 @@ class Json2Xls(object):
             self.sheet.row(self.start_row).write(index, str(value))
 
         self.start_row += 1
+
+    def auto_width(self, row, col, value):
+        try:
+            self.sheet.row(row).height_mismatch = True
+            self.sheet.row(row).height = 0
+            width = self.sheet.col(col).width
+            new_width = min((len(value) + 1) * 256, 256 * 50)
+            self.sheet.col(col).width = width if width > new_width else new_width
+        except:
+            pass
 
     def make(self, title_callback=None, body_callback=None):
         data = self.__get_json()
