@@ -39,11 +39,11 @@ API调用：
 
 命令行：
 
-    json2xls test.xls '{"a":"a", "b":"b"}'
-    json2xls test.xls '[{"a":"a", "b":"b"},{"a":1, "b":2}]'
-    json2xls test.xls "`cat tests/data.json`"
-    json2xls test.xls tests/data2.json
-    json2xls test.xls http://api.bosonnlp.com/ner/analysis -m post -d '"我是傻逼"' -h "{'X-Token': 'bosontokenheader'}"
+    $ json2xls test.xls '{"a":"a", "b":"b"}'
+    $ json2xls test.xls '[{"a":"a", "b":"b"},{"a":1, "b":2}]'
+    $ json2xls test.xls "`cat tests/data.json`"
+    $ json2xls test.xls tests/data2.json
+    $ json2xls test.xls http://api.bosonnlp.com/ner/analysis -m post -d '"我是臭流氓"' -h "{'X-Token': 'bosontokenheader'}"
 
 """
 
