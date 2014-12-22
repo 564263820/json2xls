@@ -10,6 +10,7 @@ from xlwt import Workbook
 
 class Json2Xls(object):
     """Json2Xls API 接口
+    --------------------
 
     :param string filename: 指定需要生成的的excel的文件名
 
@@ -182,6 +183,9 @@ class Json2Xls(object):
 @click.option('--style', '-S', default=None)
 @click.option('--form_encoded', '-f', is_flag=True)
 def make(filename, source, method, params, data, headers, sheet, style, form_encoded):
+    '''命令行工具
+    -------------
+    '''
     if isinstance(headers, basestring):
         headers = eval(headers)
     Json2Xls(filename, source, method=method, params=params,

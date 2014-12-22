@@ -25,7 +25,6 @@ json数据来源可以是一个返回json的url，也可以是一行json字符�
 --------
 
     >>> from json2xls import Json2Xls
-
     >>> json_data = '{"name": "ashin", "age": 16, "sex": "male"}'
     >>> Json2Xls('test.xls', json_data).make()
 
