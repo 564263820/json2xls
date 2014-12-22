@@ -142,6 +142,7 @@ class Json2Xls(object):
 
     def make(self, title_callback=None, body_callback=None):
         '''生成Excel。
+
         :param func title_callback: 自定义生成Execl表头的回调函数。
            默认为 :py:class:`None`，即采用默认方法生成
 
