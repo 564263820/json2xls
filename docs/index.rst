@@ -1,0 +1,1 @@
+.. automodule:: json2xls
