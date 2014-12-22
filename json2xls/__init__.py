@@ -16,6 +16,10 @@ json数据来源可以是一个返回json的url，也可以是一行json字符�
 
     $ pip install json2xls
 
+源码安装::
+
+    $ python setup.py install
+
 :py:mod:`json2xls` 以 MIT 协议发布。
 
 .. _GitHub: https://github.com/axiaoxin/json2xls
@@ -24,9 +28,22 @@ json数据来源可以是一个返回json的url，也可以是一行json字符�
 使用教程
 --------
 
+API调用：
+
     >>> from json2xls import Json2Xls
     >>> json_data = '{"name": "ashin", "age": 16, "sex": "male"}'
     >>> Json2Xls('test.xls', json_data).make()
+    >>>
+    >>> url = 'http://api.bosonnlp.com/sentiment/analysis'
+    >>> Json2Xls('test.xlsx', url, method='post').make()
+
+命令行：
+
+    json2xls test.xls '{"a":"a", "b":"b"}'
+    json2xls test.xls '[{"a":"a", "b":"b"},{"a":1, "b":2}]'
+    json2xls test.xls "`cat tests/data.json`"
+    json2xls test.xls tests/data2.json
+    json2xls test.xls http://api.bosonnlp.com/ner/analysis -m post -d '"我是傻逼"' -h "{'X-Token': 'bosontokenheader'}"
 
 """
 
