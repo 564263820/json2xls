@@ -11,6 +11,9 @@ json2xls:Generate Excel by JSON data
      _/ |___/\___/|_| |_|_____/_/\_\_|___/
     |__/
 
+**docs**
+
+<http://json2xls.readthedocs.org/en/latest/>
 
 **install**
 
