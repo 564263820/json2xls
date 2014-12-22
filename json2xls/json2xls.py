@@ -9,6 +9,30 @@ from xlwt import Workbook
 
 
 class Json2Xls(object):
+    """Json2Xls API 接口
+
+    :param string filename: 指定需要生成的的excel的文件名
+
+    :param string url_or_json: 指定json数据来源，
+       可以是一个返回json的url，
+       也可以是一行json字符串，
+       也可以是一个包含每行一个json的文本文件
+
+    :param string method: 当数据来源为url时，请求url的方法，
+       默认为get请求
+
+    :param dict params: get请求参数，默认为:py:class:`None`
+
+    :param dict data: post请求参数，默认为:py:class:`None`
+
+    :param dict headers: 请求url时的HTTP头信息
+
+    :param bool form_encoded: post请求时是否作为表单请求，默认为:py:class:`False`
+
+    :param string sheet_name: Excel的sheet名称，默认为 sheet0
+
+    :param string title_style: Excel的表头样式，默认为:py:class:`None`
+    """
 
     def __init__(self, filename, url_or_json, method='get',
                  params=None, data=None, headers=None, form_encoded=False,
@@ -98,6 +122,15 @@ class Json2Xls(object):
         self.start_row += 1
 
     def auto_width(self, row, col, value):
+        '''单元格宽度自动伸缩
+
+        :param int row: 单元格所在行下标
+
+        :param int col: 单元格所在列下标
+
+        :param int value: 单元格中的内容
+        '''
+
         try:
             self.sheet.row(row).height_mismatch = True
             self.sheet.row(row).height = 0
@@ -108,6 +141,14 @@ class Json2Xls(object):
             pass
 
     def make(self, title_callback=None, body_callback=None):
+        '''生成Excel。
+        :param func title_callback: 自定义生成Execl表头的回调函数。
+           默认为:py:class:`None`，即采用默认方法生成
+
+        :param func body_callback: 自定义生成Execl内容的回调函数。
+           默认为:py:class:`None`，即采用默认方法生成
+        '''
+
         data = self.__get_json()
         if not isinstance(data, (dict, list)):
             raise Exception('bad json format')
