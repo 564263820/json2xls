@@ -28,7 +28,7 @@ json数据来源可以是一个返回json的url，也可以是一行json字符�
 使用教程
 --------
 
-API调用：
+API调用::
 
     >>> from json2xls import Json2Xls
     >>> json_data = '{"name": "ashin", "age": 16, "sex": "male"}'
@@ -37,7 +37,7 @@ API调用：
     >>> url = 'http://api.bosonnlp.com/sentiment/analysis'
     >>> Json2Xls('test.xlsx', url, method='post').make()
 
-命令行：
+命令行::
 
     $ json2xls test.xls '{"a":"a", "b":"b"}'
     $ json2xls test.xls '[{"a":"a", "b":"b"},{"a":1, "b":2}]'
