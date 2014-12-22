@@ -9,7 +9,6 @@ except ImportError:
 
 
 readme = open('README.md').read()
-history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 requirements = [
     # TODO: put package requirements here
@@ -26,7 +25,7 @@ setup(
     name='json2xls',
     version='0.1.0',
     description='generate excel by json',
-    long_description=readme + '\n\n' + history,
+    long_description=readme,
     author='axiaoxin',
     author_email='254606826@qq.com',
     url='https://github.com/axiaoxin/json2xls',
