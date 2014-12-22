@@ -21,17 +21,17 @@ class Json2Xls(object):
     :param string method: 当数据来源为url时，请求url的方法，
        默认为get请求
 
-    :param dict params: get请求参数，默认为:py:class:`None`
+    :param dict params: get请求参数，默认为 :py:class:`None`
 
-    :param dict data: post请求参数，默认为:py:class:`None`
+    :param dict data: post请求参数，默认为 :py:class:`None`
 
     :param dict headers: 请求url时的HTTP头信息
 
-    :param bool form_encoded: post请求时是否作为表单请求，默认为:py:class:`False`
+    :param bool form_encoded: post请求时是否作为表单请求，默认为 :py:class:`False`
 
     :param string sheet_name: Excel的sheet名称，默认为 sheet0
 
-    :param string title_style: Excel的表头样式，默认为:py:class:`None`
+    :param string title_style: Excel的表头样式，默认为 :py:class:`None`
     """
 
     def __init__(self, filename, url_or_json, method='get',
@@ -143,10 +143,10 @@ class Json2Xls(object):
     def make(self, title_callback=None, body_callback=None):
         '''生成Excel。
         :param func title_callback: 自定义生成Execl表头的回调函数。
-           默认为:py:class:`None`，即采用默认方法生成
+           默认为 :py:class:`None`，即采用默认方法生成
 
         :param func body_callback: 自定义生成Execl内容的回调函数。
-           默认为:py:class:`None`，即采用默认方法生成
+           默认为 :py:class:`None`，即采用默认方法生成
         '''
 
         data = self.__get_json()
