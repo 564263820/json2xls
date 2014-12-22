@@ -1,1 +1,3 @@
-.. include:: ../AUTHORS.rst
+.. toctree::
+
+   axiaoxin <http://axiaoxin.com>
