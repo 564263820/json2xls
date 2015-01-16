@@ -5,7 +5,7 @@
 json2xls
 ===========
 
-根据json数据生成excel表格，默认支持单层json生成Excel，多层json可以自定义生成方法。
+根据json数据生成excel表格，默认支持生成单层json的Excel，多层json会默认被转化为单层，也可以自定义多层样式的生成方法。
 
 json数据来源可以是一个返回json的url，也可以是一行json字符串，也可以是一个包含每行一个json的文本文件
 
