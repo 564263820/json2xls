@@ -5,7 +5,13 @@ import requests
 import os
 import click
 import xlwt
+import collections
 from xlwt import Workbook
+from functools import partial
+from collections import OrderedDict
+
+json_dumps = partial(json.dumps, ensure_ascii=False)
+json_loads = partial(json.loads, object_pairs_hook=OrderedDict)
 
 
 class Json2Xls(object):
@@ -70,11 +76,11 @@ class Json2Xls(object):
     def __get_json(self):
         data = None
         try:
-            data = json.loads(self.url_or_json)
+            data = json_loads(self.url_or_json)
         except:
             if os.path.isfile(self.url_or_json):
                 with open(self.url_or_json, 'r') as source:
-                    data = [json.loads(line) for line in source]
+                    data = [json_loads(line.decode('utf-8')) for line in source]
             else:
                 try:
                     if self.method.lower() == 'get':
@@ -85,7 +91,7 @@ class Json2Xls(object):
                     else:
                         if os.path.isfile(self.data):
                             with open(self.data, 'r') as source:
-                                self.data = [json.loads(line) for line in source]
+                                self.data = [json_loads(line.decode('utf-8')) for line in source]
                         if not self.form_encoded:
                             self.data = json.dumps(self.data)
                         resp = requests.post(self.url_or_json,
@@ -96,7 +102,10 @@ class Json2Xls(object):
         return data
 
     def __fill_title(self, data):
+        '''生成默认title'''
+        data = self.flatten(data)
         for index, key in enumerate(data.keys()):
+            key = json_dumps(key)
             try:
                 self.sheet.col(index).width = (len(key) + 1) * 256
             except:
@@ -106,18 +115,17 @@ class Json2Xls(object):
         self.start_row += 1
 
     def __fill_data(self, data):
+        '''生成默认sheet'''
+        data = self.flatten(data)
         for index, value in enumerate(data.values()):
-            if isinstance(value, basestring):
-                value = value.encode('utf-8')
-            else:
-                value = str(value)
+            value = json_dumps(value)
             try:
                 width = self.sheet.col(index).width
                 new_width = min((len(value) + 1) * 256, 256 * 50)
                 self.sheet.col(index).width = width if width > new_width else new_width
             except:
                 pass
-            self.sheet.row(self.start_row).write(index, str(value))
+            self.sheet.row(self.start_row).write(index, value)
 
         self.start_row += 1
 
@@ -140,6 +148,24 @@ class Json2Xls(object):
         except:
             pass
 
+    def flatten(self, data_dict, parent_key='', sep='.'):
+        '''对套嵌的dict进行flatten处理为单层dict
+
+        :param dict data_dict: 需要处理的dict数据。
+
+        :param str parent_key: 上层字典的key，默认为空字符串。
+
+        :param str sep: 套嵌key flatten后的分割符， 默认为“.” 。
+        '''
+        items = []
+        for k, v in data_dict.items():
+            new_key = parent_key + sep + k if parent_key else k
+            if isinstance(v, collections.MutableMapping):
+                items.extend(self.flatten(v, new_key, sep=sep).items())
+            else:
+                items.append((new_key, v))
+        return OrderedDict(items)
+
     def make(self, title_callback=None, body_callback=None):
         '''生成Excel。
 
@@ -151,6 +177,7 @@ class Json2Xls(object):
         '''
 
         data = self.__get_json()
+        print data
         if not isinstance(data, (dict, list)):
             raise Exception('bad json format')
         if isinstance(data, dict):

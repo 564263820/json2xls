@@ -49,6 +49,6 @@ API调用::
 
 __author__ = 'Axiaoxin'
 __email__ = '254606826@qq.com'
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 
 from json2xls import Json2Xls

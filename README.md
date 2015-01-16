@@ -23,7 +23,7 @@ or
 
     python setup.py install
 
-**generate excel by json string or json file**(each field in the json data is the same)
+**generate excel by json string or json file**
 
 code:
 
@@ -79,7 +79,7 @@ excel:
 
 **Custom title and body**
 
-default only support one layer json to generate the excel. if you want custom it,
+default only support one layer json to generate the excel, the nested json will be flattened. if you want custom it,
 you can write the `title_callback` function and `body_callback` function, the pass them in the `make` function.
 for the `body_callback`, you just need to care one line data's write way.
 
