@@ -7,17 +7,9 @@ try:
 except ImportError:
     from distutils.core import setup
 
-from json2xls import __version__
-
-
 readme = open('README.md').read()
 
-requirements = [
-    # TODO: put package requirements here
-    'requests',
-    'click',
-    'xlwt',
-]
+requirements = open('requirements.txt').readlines()
 
 test_requirements = [
     # TODO: put package test requirements here
@@ -25,7 +17,8 @@ test_requirements = [
 
 setup(
     name='json2xls',
-    version=__version__,
+    version='0.1.2',
+    #version=__version__,
     description='generate excel by json',
     long_description=readme,
     author='axiaoxin',
@@ -46,12 +39,7 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
-        "Programming Language :: Python :: 2",
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
     ],
     test_suite='tests',
     tests_require=test_requirements,

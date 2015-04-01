@@ -81,7 +81,7 @@ excel:
 
 default only support one layer json to generate the excel, the nested json will be flattened. if you want custom it,
 you can write the `title_callback` function and `body_callback` function, the pass them in the `make` function.
-for the `body_callback`, you just need to care one line data's write way.
+for the `body_callback`, you just need to care one line data's write way, json2xls default think the data are all the same.
 
 example:
 
