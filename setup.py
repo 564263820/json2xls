@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-
 try:
     from setuptools import setup
 except ImportError:
@@ -9,7 +7,11 @@ except ImportError:
 
 readme = open('README.md').read()
 
-requirements = open('requirements.txt').readlines()
+requirements = [
+    "click",
+    "requests",
+    "xlwt"
+]
 
 test_requirements = [
     # TODO: put package test requirements here
@@ -17,7 +19,7 @@ test_requirements = [
 
 setup(
     name='json2xls',
-    version='0.1.3',
+    version='0.1.3c',
     description='generate excel by json',
     long_description=readme,
     author='axiaoxin',
