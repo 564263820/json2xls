@@ -14,9 +14,9 @@ from collections import OrderedDict
 class Json2Xls(object):
     """Json2Xls API 接口
 
-    :param string filename: 指定需要生成的的excel的文件名
+    :param string xls_filename: 指定需要生成的的excel的文件名
 
-    :param string url_or_json: 指定json数据来源，
+    :param string json_data: 指定json数据来源，
        可以是一个返回json的url，
        也可以是一行json字符串，
        也可以是一个包含每行一个json的文本文件
@@ -26,9 +26,9 @@ class Json2Xls(object):
 
     :param dict params: get请求参数，默认为 :py:class:`None`
 
-    :param dict data: post请求参数，默认为 :py:class:`None`
+    :param dict post_data: post请求参数，默认为 :py:class:`None`
 
-    :param dict headers: 请求url时的HTTP头信息
+    :param dict headers: 请求url时的HTTP头信息 (字典、json或文件)
 
     :param bool form_encoded: post请求时是否作为表单请求，默认为 :py:class:`False`
 
@@ -43,18 +43,18 @@ class Json2Xls(object):
     :param bool dumps: 生成excel时对表格内容执行json_dumps，默认为 :py:class:`False`
     """
 
-    def __init__(self, filename, url_or_json, method='get',
-                 params=None, data=None, headers=None, form_encoded=False, dumps=False,
+    def __init__(self, xls_filename, json_data, method='get',
+                 params=None, post_data=None, headers=None, form_encoded=False, dumps=False,
                  sheet_name='sheet0', title_style=None):
         self.json_dumps = partial(json.dumps, ensure_ascii=False)
         self.json_loads = partial(json.loads, object_pairs_hook=OrderedDict)
 
         self.sheet_name = sheet_name
-        self.filename = filename
-        self.url_or_json = url_or_json
+        self.xls_filename = xls_filename
+        self.json_data = json_data
         self.method = method
         self.params = params
-        self.data = data
+        self.post_data = post_data
         self.headers = headers
         self.form_encoded = form_encoded
         self.dumps = dumps
@@ -74,39 +74,44 @@ class Json2Xls(object):
                                        )
 
     def __check_file_suffix(self):
-        suffix = self.filename.split('.')[-1]
-        if '.' not in self.filename:
-            self.filename += '.xls'
+        suffix = self.xls_filename.split('.')[-1]
+        if '.' not in self.xls_filename:
+            self.xls_filename += '.xls'
         elif suffix != 'xls':
             raise Exception('filename suffix must be .xls')
 
     def __get_json(self):
         data = None
         try:
-            data = self.json_loads(self.url_or_json)
+            data = self.json_loads(self.json_data)
         except:
-            if os.path.isfile(self.url_or_json):
-                with open(self.url_or_json, 'r') as source:
+            if os.path.isfile(self.json_data):
+                with open(self.json_data, 'r') as source:
                     try:
-                        data = self.json_loads(source.decode('utf-8').read())
-                        print data
+                        data = self.json_loads(source.read().decode('utf-8').replace('\n', ''))
                     except:
+                        source.seek(0)
                         data = [self.json_loads(line.decode('utf-8')) for line in source]
             else:
+                if os.path.isfile(self.headers):
+                    with open(self.headers) as headers_txt:
+                        self.headers = self.json_loads(headers_txt.read().decode('utf-8').replace('\n', ''))
+                elif isinstance(self.headers, basestring):
+                    self.headers = self.json_loads(self.headers)
                 try:
                     if self.method.lower() == 'get':
-                        resp = requests.get(self.url_or_json,
+                        resp = requests.get(self.json_data,
                                             params=self.params,
                                             headers=self.headers)
                         data = resp.json()
                     else:
-                        if os.path.isfile(self.data):
-                            with open(self.data, 'r') as source:
-                                self.data = [self.json_loads(line.decode('utf-8')) for line in source]
+                        if isinstance(self.post_data, basestring) and os.path.isfile(self.post_data):
+                            with open(self.post_data, 'r') as source:
+                                self.post_data = self.json_loads(source.read().decode('utf-8').replace('\n', ''))
                         if not self.form_encoded:
-                            self.data = self.json_dumps(self.data)
-                        resp = requests.post(self.url_or_json,
-                                             data=self.data, headers=self.headers)
+                            self.post_data = self.json_dumps(self.post_data)
+                        resp = requests.post(self.json_data,
+                                             data=self.post_data, headers=self.headers)
                         data = resp.json()
                 except Exception as e:
                     print e
@@ -186,11 +191,10 @@ class Json2Xls(object):
 
         data = self.__get_json()
         if not isinstance(data, (dict, list)):
-            raise Exception('bad json format')
+            raise Exception('The %s is not a valid json format' % type(data))
         if isinstance(data, dict):
             data = [data]
 
-        print data
         if title_callback != None:
             title_callback(self, data[0])
         else:
@@ -203,26 +207,24 @@ class Json2Xls(object):
             for d in data:
                 self.__fill_data(d)
 
-        self.book.save(self.filename)
+        self.book.save(self.xls_filename)
 
 
 @click.command()
-@click.argument('filename')
-@click.argument('source')
+@click.argument('xls_filename')
+@click.argument('json_data')
 @click.option('--method', '-m', default='get')
 @click.option('--params', '-p', default=None)
-@click.option('--data', '-d', default=None)
+@click.option('--post_data', '-d', default=None)
 @click.option('--headers', '-h', default=None)
 @click.option('--sheet', '-s', default='sheet0')
 @click.option('--style', '-S', default=None)
 @click.option('--form_encoded', '-f', is_flag=True)
 @click.option('--dumps', '-D', is_flag=True)
-def make(filename, source, method, params, data, headers, sheet, style, form_encoded, dumps):
-    if isinstance(headers, basestring):
-        headers = eval(headers)
-    Json2Xls(filename, source, method=method, params=params,
-             data=data, headers=headers, form_encoded=form_encoded, dumps=dumps, sheet_name=sheet,
-             title_style=style).make()
+def make(xls_filename, json_data, method, params, post_data, headers, sheet, style, form_encoded, dumps):
+    Json2Xls(xls_filename, json_data, method=method, params=params,
+             post_data=post_data, headers=headers, form_encoded=form_encoded, dumps=dumps,
+             sheet_name=sheet, title_style=style).make()
 
 if __name__ == '__main__':
     make()
