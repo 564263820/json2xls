@@ -177,7 +177,7 @@ class Json2Xls(object):
         '''
 
         data = self.__get_json()
-        print data
+        # print data
         if not isinstance(data, (dict, list)):
             raise Exception('bad json format')
         if isinstance(data, dict):
