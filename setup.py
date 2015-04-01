@@ -17,7 +17,7 @@ test_requirements = [
 
 setup(
     name='json2xls',
-    version='0.1.2',
+    version='0.1.3',
     description='generate excel by json',
     long_description=readme,
     author='axiaoxin',
