@@ -30,13 +30,7 @@ json数据来源可以是一个返回json的url，也可以是一行json字符�
 
 API调用::
 
-    >>> from json2xls import Json2Xls
-    >>> json_data = '{"name": "ashin", "age": 16, "sex": "male"}'
-    >>> Json2Xls('test.xls', json_data).make()
-    >>>
-    >>> url = 'http://api.bosonnlp.com/sentiment/analysis'
-    >>> Json2Xls('test.xlsx', url, method='post').make()
-
+    from json2xls import Json2Xls
 
     # 从json字符串生成excel
     json_data = u'''[
