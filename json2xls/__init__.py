@@ -117,11 +117,19 @@ API调用::
 
 命令行::
 
-    $ json2xls test.xls '{"a":"a", "b":"b"}'
-    $ json2xls test.xls '[{"a":"a", "b":"b"},{"a":1, "b":2}]'
-    $ json2xls test.xls "`cat tests/data.json`"
-    $ json2xls test.xls tests/data2.json
-    $ json2xls test.xls http://api.bosonnlp.com/ner/analysis -m post -d '"我是臭流氓"' -h "{'X-Token': 'bosontokenheader'}"
+    # from json string
+    json2xls tests/cmd_str_test.xls '{"a":"a", "b":"b"}'
+    json2xls tests/cmd_str_test1.xls '[{"a":"a", "b":"b"},{"a":1, "b":2}]'
+
+    # from file: whole file is a complete json data
+    json2xls tests/cmd_list_test.xls "`cat tests/list_data.json`"
+
+    # from file: each line is a json data
+    json2xls tests/cmd_line_test.xls tests/line_data.json
+
+    # from url
+    json2xls tests/cmd_get_test.xls http://httpbin.org/get
+    json2xls tests/cmd_post_test.xls http://httpbin.org/post -m post -d '"hello json2xls"' -h "{'X-Token': 'bolobolomi'}"
 
 """
 
