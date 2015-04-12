@@ -1,14 +1,16 @@
-#!/usr/bin/env python
-#-*- coding:utf-8 -*-
-import json
-import requests
-import os
-import click
-import xlwt
+# !/usr/bin/env python
+# -*- coding:utf-8 -*-
 import collections
-from xlwt import Workbook
-from functools import partial
+import json
+import os
 from collections import OrderedDict
+from functools import partial
+
+import click
+import requests
+
+import xlwt
+from xlwt import Workbook
 
 
 class Json2Xls(object):
@@ -36,16 +38,23 @@ class Json2Xls(object):
 
     :param string title_style: Excel的表头样式，默认为 :py:class:`None`
 
-    :param function json_dumps: 带ensure_ascii参数的json.dumps()，默认参数值为 :py:class:`False`
+    :param function json_dumps: 带ensure_ascii参数的json.dumps()，
+                                默认参数值为 :py:class:`False`
 
     :param function json_loads: 带object_pairs_hook参数的json.loads()，默认为保持原始排序
 
     :param bool dumps: 生成excel时对表格内容执行json_dumps，默认为 :py:class:`False`
     """
 
-    def __init__(self, xls_filename, json_data, method='get',
-                 params=None, post_data=None, headers=None, form_encoded=False, dumps=False,
-                 sheet_name='sheet0', title_style=None):
+    def __init__(self, xls_filename, json_data,
+                 method='get',
+                 params=None,
+                 post_data=None,
+                 headers=None,
+                 form_encoded=False,
+                 dumps=False,
+                 sheet_name='sheet0',
+                 title_style=None):
         self.json_dumps = partial(json.dumps, ensure_ascii=False)
         self.json_loads = partial(json.loads, object_pairs_hook=OrderedDict)
 
@@ -66,12 +75,11 @@ class Json2Xls(object):
 
         self.start_row = 0
 
-        self.title_style = xlwt.easyxf(title_style or
-                                       'font: name Arial, bold on;'
-                                       'align: vert centre, horiz center;'
-                                       'borders: top 1, bottom 1, left 1, right 1;'
-                                       'pattern: pattern solid, fore_colour lime;'
-                                       )
+        self.title_style = xlwt.easyxf(
+            title_style or 'font: name Arial, bold on;'
+            'align: vert centre, horiz center;'
+            'borders: top 1, bottom 1, left 1, right 1;'
+            'pattern: pattern solid, fore_colour lime;')
 
     def __check_file_suffix(self):
         suffix = self.xls_filename.split('.')[-1]
@@ -88,14 +96,18 @@ class Json2Xls(object):
             if os.path.isfile(self.json_data):
                 with open(self.json_data, 'r') as source:
                     try:
-                        data = self.json_loads(source.read().decode('utf-8').replace('\n', ''))
+                        data = self.json_loads(
+                            source.read().decode('utf-8').replace('\n', ''))
                     except:
                         source.seek(0)
-                        data = [self.json_loads(line.decode('utf-8')) for line in source]
+                        data = [self.json_loads(line.decode('utf-8'))
+                                for line in source]
             else:
                 if os.path.isfile(self.headers):
                     with open(self.headers) as headers_txt:
-                        self.headers = self.json_loads(headers_txt.read().decode('utf-8').replace('\n', ''))
+                        self.headers = self.json_loads(
+                            headers_txt.read().decode('utf-8').replace('\n',
+                                                                       ''))
                 elif isinstance(self.headers, basestring):
                     self.headers = self.json_loads(self.headers)
                 try:
@@ -105,13 +117,18 @@ class Json2Xls(object):
                                             headers=self.headers)
                         data = resp.json()
                     else:
-                        if isinstance(self.post_data, basestring) and os.path.isfile(self.post_data):
+                        if isinstance(self.post_data,
+                                      basestring) and os.path.isfile(
+                                          self.post_data):
                             with open(self.post_data, 'r') as source:
-                                self.post_data = self.json_loads(source.read().decode('utf-8').replace('\n', ''))
+                                self.post_data = self.json_loads(
+                                    source.read().decode('utf-8').replace('\n',
+                                                                          ''))
                         if not self.form_encoded:
                             self.post_data = self.json_dumps(self.post_data)
                         resp = requests.post(self.json_data,
-                                             data=self.post_data, headers=self.headers)
+                                             data=self.post_data,
+                                             headers=self.headers)
                         data = resp.json()
                 except Exception as e:
                     print e
@@ -127,8 +144,7 @@ class Json2Xls(object):
                 self.sheet.col(index).width = (len(key) + 1) * 256
             except:
                 pass
-            self.sheet.row(self.start_row).write(index,
-                                                       key, self.title_style)
+            self.sheet.row(self.start_row).write(index, key, self.title_style)
         self.start_row += 1
 
     def __fill_data(self, data):
@@ -157,7 +173,8 @@ class Json2Xls(object):
             # self.sheet.row(row).height = 0
             width = self.sheet.col(col).width
             new_width = min((len(value) + 1) * 256, 256 * 50)
-            self.sheet.col(col).width = width if width > new_width else new_width
+            self.sheet.col(col).width = width \
+                if width > new_width else new_width
         except:
             pass
 
@@ -195,12 +212,12 @@ class Json2Xls(object):
         if isinstance(data, dict):
             data = [data]
 
-        if title_callback != None:
+        if title_callback is not None:
             title_callback(self, data[0])
         else:
             self.__fill_title(data[0])
 
-        if body_callback != None:
+        if body_callback is not None:
             for d in data:
                 body_callback(self, d)
         else:
@@ -221,10 +238,18 @@ class Json2Xls(object):
 @click.option('--style', '-S', default=None)
 @click.option('--form_encoded', '-f', is_flag=True)
 @click.option('--dumps', '-D', is_flag=True)
-def make(xls_filename, json_data, method, params, post_data, headers, sheet, style, form_encoded, dumps):
-    Json2Xls(xls_filename, json_data, method=method, params=params,
-             post_data=post_data, headers=headers, form_encoded=form_encoded, dumps=dumps,
-             sheet_name=sheet, title_style=style).make()
+def make(xls_filename, json_data, method, params, post_data, headers, sheet,
+         style, form_encoded, dumps):
+    Json2Xls(xls_filename, json_data,
+             method=method,
+             params=params,
+             post_data=post_data,
+             headers=headers,
+             form_encoded=form_encoded,
+             dumps=dumps,
+             sheet_name=sheet,
+             title_style=style).make()
+
 
 if __name__ == '__main__':
     make()
