@@ -23,7 +23,7 @@ or
 
     python setup.py install
 
-**generate excel by json string or json file or url which return a json**
+#generate excel by json string or json file or url which return a json
 
 ##code demo:
 
