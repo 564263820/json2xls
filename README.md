@@ -25,15 +25,15 @@ or
 
 **generate excel by json string or json file or url which return a json**
 
-code demo:
+##code demo:
 
-    :::python
+####从json字符串生成excel
+
     #!/usr/bin/env python
     #-*- coding:utf-8 -*-
 
     from json2xls.json2xls import Json2Xls
 
-    # 从json字符串生成excel
     json_data = u'''[
         {"姓名": "John", "年龄": 30, "性别": "男"},
         {"姓名": "Alice", "年龄": 18, "性别": "女"}
@@ -42,34 +42,52 @@ code demo:
     obj.make()
 
 
-    # 从get请求返回的json生成excel
+####从get请求返回的json生成excel
+
     params = {
         'location': u'上海',
         'output': 'json',
         'ak': '5slgyqGDENN7Sy7pw29IUvrZ'
     }
-    Json2Xls('tests/url_get_test.xls', "http://httpbin.org/get", params=params).make()
+    Json2Xls('tests/url_get_test.xls',
+             "http://httpbin.org/get",
+             params=params).make()
 
 
-    # 从post请求返回的json生成excel
+####从post请求返回的json生成excel
+
     post_data = {
         'location': u'上海',
         'output': 'json',
         'ak': '5slgyqGDENN7Sy7pw29IUvrZ'
     }
-    Json2Xls('tests/url_post_test1.xls', "http://httpbin.org/post", method='post', post_data=post_data, form_encoded=True).make()
-    # 如果post_data很复杂很长可以写到一个文件里
+    Json2Xls('tests/url_post_test1.xls',
+             "http://httpbin.org/post",
+             method='post',
+             post_data=post_data,
+             form_encoded=True).make()
+
+####如果post_data很复杂很长可以写到一个文件里
+
     post_data = 'tests/post_data.json'
-    Json2Xls('tests/url_post_test2.xls', "http://httpbin.org/post", method='post', post_data=post_data, form_encoded=True).make()
+    Json2Xls('tests/url_post_test2.xls',
+             "http://httpbin.org/post",
+             method='post',
+             post_data=post_data,
+             form_encoded=True).make()
 
 
-    # 从文件内容为每行一个的json字符串的文件生成excel
+####从文件内容为每行一个的json字符串的文件生成excel
+
     obj = Json2Xls('tests/json_line_test.xls', json_data='tests/line_data.json')
     obj.make()
-    # 从文件内容为一个json列表的文件生成excel
+
+####从文件内容为一个json列表的文件生成excel
+
     Json2Xls('tests/json_list_test.xls', json_data='tests/list_data.json').make()
 
-    # 自定义生成excel
+####自定义生成excel
+
     def title_callback(self, data):
         '''use one of data record to generate excel title'''
         self.sheet.write_merge(0, 0, 0, 3, 'title', self.title_style)
@@ -110,19 +128,23 @@ code demo:
     j = Json2Xls('tests/callback.xls', data)
     j.make(title_callback=title_callback, body_callback=body_callback)
 
-command:
+##command:
 
-    # from json string
+####from json string
+
     json2xls tests/cmd_str_test.xls '{"a":"a", "b":"b"}'
     json2xls tests/cmd_str_test1.xls '[{"a":"a", "b":"b"},{"a":1, "b":2}]'
 
-    # from file: whole file is a complete json data
+#### from file: whole file is a complete json data
+
     json2xls tests/cmd_list_test.xls "`cat tests/list_data.json`"
 
-    # from file: each line is a json data
+####from file: each line is a json data
+
     json2xls tests/cmd_line_test.xls tests/line_data.json
 
-    # from url
+####from url
+
     json2xls tests/cmd_get_test.xls http://httpbin.org/get
     json2xls tests/cmd_post_test.xls http://httpbin.org/post -m post -d '"hello json2xls"' -h "{'X-Token': 'bolobolomi'}"
 
