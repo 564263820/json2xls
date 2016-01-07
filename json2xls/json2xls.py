@@ -187,14 +187,22 @@ class Json2Xls(object):
 
         :param str sep: 套嵌key flatten后的分割符， 默认为“.” 。
         '''
-        items = []
-        for k, v in data_dict.items():
-            new_key = parent_key + sep + k if parent_key else k
-            if isinstance(v, collections.MutableMapping):
-                items.extend(self.flatten(v, new_key, sep=sep).items())
+
+        out = {}
+
+        def _flatten(x, parent_key, sep):
+            if isinstance(x, collections.MutableMapping):
+                for a in x:
+                    _flatten(x[a], parent_key + a + sep, sep)
+            elif isinstance(x, collections.MutableSequence):
+                i = 0
+                for a in x:
+                    _flatten(a, parent_key + str(i) + sep, sep)
+                    i += 1
             else:
-                items.append((new_key, v))
-        return OrderedDict(items)
+                out[str(parent_key[:-1])] = str(x)
+        _flatten(data_dict, parent_key, sep)
+        return OrderedDict(out)
 
     def make(self, title_callback=None, body_callback=None):
         '''生成Excel。
